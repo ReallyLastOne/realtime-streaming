@@ -10,6 +10,17 @@ public class Entry implements Serializable {
     private long t;
     private double v;
 
+    public Entry() {
+    }
+
+    public Entry(Object c, double p, String s, long t, double v) {
+        this.c = c;
+        this.p = p;
+        this.s = s;
+        this.t = t;
+        this.v = v;
+    }
+
     public Object getC() {
         return c;
     }
