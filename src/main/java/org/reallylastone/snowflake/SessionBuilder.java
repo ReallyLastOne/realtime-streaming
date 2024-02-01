@@ -18,7 +18,7 @@ public class SessionBuilder {
 
         configMap.put("URL", "https://" + getEnv("SNOWFLAKE_ACCOUNT") + ".snowflakecomputing.com");
         configMap.put("USER", getEnv("SNOWFLAKE_USER"));
-        configMap.put("PASSWORD", getEnv("SNOWFLAKE_PASSWORD"));
+        configMap.put("PRIVATE_KEY_FILE", getEnv("SNOWFLAKE_PRIVATE_KEY_FILE"));
         configMap.put("DB", getEnv("SNOWFLAKE_DATABASE"));
         configMap.put("ROLE", getEnv("SNOWFLAKE_ROLE"));
         configMap.put("SCHEMA", getEnv("SNOWFLAKE_SCHEMA"));
