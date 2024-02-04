@@ -13,7 +13,6 @@ public class WebSocketToKafkaSender implements MessageHandler {
     private static final ObjectMapper mapper = new ObjectMapper();
     private final KafkaProducer<String, Entry> producer = ProducerBuilder.create();
 
-
     @Override
     public void onMessage(String message) {
         FinnhubResponse response;

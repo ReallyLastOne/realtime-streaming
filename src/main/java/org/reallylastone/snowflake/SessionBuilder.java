@@ -1,10 +1,10 @@
 package org.reallylastone.snowflake;
 
 
+import com.snowflake.snowpark_java.Session;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.snowflake.snowpark_java.Session;
 
 import static org.reallylastone.util.Utils.getEnv;
 
@@ -14,6 +14,7 @@ public class SessionBuilder {
     }
 
     public static Session create() {
+        System.out.println("Creating Snowflake session...");
         Map<String, String> configMap = new HashMap<>();
 
         configMap.put("URL", "https://" + getEnv("SNOWFLAKE_ACCOUNT") + ".snowflakecomputing.com");

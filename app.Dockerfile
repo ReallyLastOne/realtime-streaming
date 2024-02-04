@@ -1,0 +1,22 @@
+FROM maven:3-eclipse-temurin-21-alpine
+
+USER root
+ARG ACCOUNT
+ARG USERNAME
+ARG PRIVATE_KEY
+ARG FINNHUB_TOKEN
+
+ENV SNOWFLAKE_ACCOUNT=$ACCOUNT SNOWFLAKE_USER=$USERNAME FINNHUB_TOKEN=$FINNHUB_TOKEN
+ENV SNOWFLAKE_WAREHOUSE=COMPUTE_WH SNOWFLAKE_DATABASE=financial_data SNOWFLAKE_SCHEMA=public SNOWFLAKE_ROLE=ACCOUNTADMIN
+
+COPY . /app
+WORKDIR "/app"
+
+RUN echo "$PRIVATE_KEY" > snowflake_rsa_key.pem
+
+ENV SNOWFLAKE_PRIVATE_KEY_FILE="/app/snowflake_rsa_key.pem"
+
+RUN mvn clean package -DskipTests
+WORKDIR target
+
+ENTRYPOINT ["java", "-jar", "realtime-streaming-1.0-SNAPSHOT.jar"]

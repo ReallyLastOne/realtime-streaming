@@ -1,7 +1,13 @@
 version: '3.8'
 services:
+  realtime-streaming-app:
+    image: realtime-streaming-app
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    depends_on:
+      - kafka
   kafka:
-    image: confluentinc/cp-kafka:6.0.14
+    image: realtime-streaming-kafka
     depends_on:
       - zookeeper
     ports:
@@ -9,10 +15,33 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:9092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:29092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:9092,LISTENER_DOCKER_EXTERNAL://kafka:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    command:
+      - /bin/kafka-topics --bootstrap-server localhost:9092 --create --partitions 1 --replication-factor 1 --topic essaaa
+      - /bin/connect-standalone /etc/kafka/connect-standalone.properties /etc/kafka/SF_connect.properties
+  init-kafka:
+    image: realtime-streaming-kafka
+    depends_on:
+      - kafka
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka:29092 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic trade --replication-factor 1 --partitions 1
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka:29092 --list
+      echo "bootstrap.servers=kafka:29092" >> /etc/kafka/connect-standalone.properties
+      
+      echo -e 'Starting Snowflake Kafka connector'
+      /bin/connect-standalone /etc/kafka/connect-standalone.properties /etc/kafka/SF_connect.properties
+      "
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     ports:
