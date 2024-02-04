@@ -52,3 +52,12 @@ and then in same directory run:
 ~~~
 ./run.sh
 ~~~
+
+#### Links
+- https://docs.snowflake.com/en/user-guide/data-load-snowpipe-streaming-kafka 
+- https://docs.snowflake.com/en/user-guide/kafka-connector-install#label-kafka-connector-configuration-file 
+- https://docs.confluent.io/platform/current/connect/userguide.html 
+- https://stackoverflow.com/questions/51335621/kafka-connect-cluster-setup-or-launching-connect-workers 
+- https://stackoverflow.com/questions/61521437/how-to-run-kafka-connect-connect-distributed-sh-in-the-background-daemon 
+- https://stackoverflow.com/questions/29405727/java-lang-noclassdeffounderror-org-bouncycastle-jce-provider-bouncycastleprovid 
+- https://www.youtube.com/watch?v=18gDPSOH3wU
